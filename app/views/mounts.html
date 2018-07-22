@@ -11,6 +11,12 @@
     </h2>
   </div>
   <div ng-hide="showPlanner">
+    <div class="filterbox alert alert-info">
+      <input type="checkbox" id="allclasses" ng-model="showAllClasses" ng-click="reloadItems()" /><label for="allclasses">All classes</label>
+      <input type="checkbox" id="allfactions" ng-model="showAllFactions" ng-click="reloadItems()" /><label for="allfactions">All factions</label>
+      <input type="checkbox" id="unobtainable" ng-model="showUnobtainable" ng-click="reloadItems()" /><label for="unobtainable">Unobtainable</label>
+    </div>
+
     <h3 class="categoryHeader" ng-hide="category.name == 'Mounts'" ng-repeat-start="category in items.categories">{{ category.name }}</h3>
     <div class="sect" ng-repeat="subCategory in category.subCategories">
   		<h5 class="subCatHeader">{{ subCategory.name }}</h5>

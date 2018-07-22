@@ -30,7 +30,7 @@
         });
 
         return {
-            getItems: function(jsonFile, characterProperty, collectedId) {
+            getItems: function(jsonFile, characterProperty, collectedId, filters) {
 
                 if (jsonFile === 'pets' && parsedCompanions) {
                     return $q.when(parsedCompanions);
@@ -53,8 +53,9 @@
                             .then(function(data) {
                                 
                                 $log.log('Parsing ' + jsonFile + '.json...');
-                                var parsed = parseItemsObject(data.data, character, characterProperty, collectedId);
+                                var parsed = parseItemsObject(data.data, character, characterProperty, collectedId, filters);
 
+                                /*
                                 if (jsonFile === 'pets') {
                                     parsedCompanions = parsed; 
                                 } else if (jsonFile === 'battlepets') {
@@ -64,6 +65,7 @@
                                 } else if (jsonFile === 'toys') {
                                     parsedToys = parsed;
                                 }
+                                */
 
                                 return parsed;
                             });
@@ -71,12 +73,13 @@
             }
         };
 
-        function parseItemsObject(categories, character, characterProperty, collectedId) {    
+        function parseItemsObject(categories, character, characterProperty, collectedId, filters) {
             var obj = { 'categories': [] };
             var collected = {};
             var totalCollected = 0;
             var totalPossible = 0;
             var found = {};
+            if (!filters) filters = {};
 
             // Retrieve the toys from the localstorage
             // Remove this if Blizzard ever implements this in the API.
@@ -223,13 +226,13 @@
 
                         // What would cause it to show up in the UI:
                         //    1) You have the item
-                        //    2) Its still obtainable 
-                        //    3) You meet the class restriction
-                        //    4) You meet the race restriction
+                        //    2) Its still obtainable (or showUnobtainable is checked)
+                        //    3) You meet the class restriction (or showAllClasses is checked)
+                        //    4) You meet the race restriction (or showAllFactions is checked)
                         var hasthis = itm.collected;
-                        var showthis = (hasthis || !item.notObtainable);
+                        var showthis = (hasthis || !item.notObtainable || filters.showUnobtainable);
 
-                        if (item.side && item.side !== character.faction) {
+                        if (item.side && item.side !== character.faction && !filters.showAllFactions) {
                             showthis = false;
                         }
 
@@ -247,7 +250,7 @@
                             }
                         }
 
-                        if (item.allowableClasses && item.allowableClasses.length > 0)
+                        if (item.allowableClasses && item.allowableClasses.length > 0 && !filters.showAllClasses)
                         {
                             var foundClass = false;
                             angular.forEach(item.allowableClasses, function(allowedClass) {
