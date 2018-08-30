@@ -37,7 +37,7 @@
                 showUnobtainable: $scope.showUnobtainable,
                 showAllClasses: $scope.showAllClasses,
                 showAllFactions: $scope.showAllFactions,
-            }
+            };
             MountsAndPetsService.getItems('mounts', 'mounts', 'spellId', filters).then(function(items){
                 $scope.items = items;
 
@@ -80,7 +80,7 @@
                     }
                 };
             });
-        }
+        };
 
         $scope.reloadItems();
     }

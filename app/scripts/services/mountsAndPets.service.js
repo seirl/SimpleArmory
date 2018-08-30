@@ -79,7 +79,9 @@
             var totalCollected = 0;
             var totalPossible = 0;
             var found = {};
-            if (!filters) filters = {};
+            if (!filters) {
+                filters = {};
+            }
 
             // Retrieve the toys from the localstorage
             // Remove this if Blizzard ever implements this in the API.
